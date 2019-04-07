@@ -41,7 +41,11 @@ namespace HubGrubv2
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            
+            services.AddHttpClient("HubGrubAPI", c =>
+            {
+                c.BaseAddress = new Uri("http://localhost:58873");
+                c.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
 
         }
 
