@@ -8,6 +8,13 @@ namespace HubGrubv2.Controllers
     {
         public IActionResult Index()
         {
+            if(User.Identity.IsAuthenticated)
+            {
+                //if the user is authenticated redirect them to their homepage
+                //return RedirectToAction("Dashboard", "Home");
+            }
+
+            //if they're not, send them to the public homepage
             return View();
         }
 
