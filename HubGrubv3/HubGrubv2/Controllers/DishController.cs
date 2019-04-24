@@ -9,6 +9,7 @@ namespace HubGrubv2.Controllers
 {
     public class DishController : Controller
     {
+        //comment
         AppDbContext dbcontext = new AppDbContext();
 
         public IActionResult Index()

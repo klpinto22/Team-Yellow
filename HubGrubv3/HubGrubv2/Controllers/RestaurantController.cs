@@ -1,17 +1,35 @@
 ﻿using HubGrubv2.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace HubGrubv2.Controllers
 {
     public class RestaurantController : Controller
     {
-        AppDbContext dbcontext = new AppDbContext();
+        private readonly IHttpClientFactory _clientFactory;
+        public IList<RestaurantModel> Restaurants { get; private set; }
 
-        public IActionResult Index()
+        public RestaurantController(IHttpClientFactory clientFactory)
         {
-            return View(dbcontext.RestaurantModel.ToList());
+            _clientFactory = clientFactory;
         }
-        
+
+        public async Task<IActionResult> Index()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, "api/restaurant");
+            var client = _clientFactory.CreateClient("HubGrubAPI");
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Restaurants = await response.Content.ReadAsAsync<IList<RestaurantModel>>();
+                return View(Restaurants);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }
